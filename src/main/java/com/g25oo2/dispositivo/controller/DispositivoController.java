@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.view.RedirectView;
 
 import com.g25oo2.dispositivo.entity.Dispositivo;
 import com.g25oo2.dispositivo.service.DispositivoService;
@@ -21,6 +22,8 @@ public class DispositivoController {
 	
 	@GetMapping("/dispositivos")
 	public List<Dispositivo> traerDispositivos() {
-		return dispositivoService.traer();
+		List<Dispositivo> aux = dispositivoService.traer();
+		System.out.println("rta: "+ aux.toString());
+		return aux;
 	}
 }

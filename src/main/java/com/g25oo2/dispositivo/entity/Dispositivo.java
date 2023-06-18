@@ -55,5 +55,11 @@ public class Dispositivo {
 	public void setEstado(int estado) {
 		this.estado = estado;
 	}
-	
+
+	@Override
+	public String toString() {
+		return "Dispositivo [idDispositivo=" + idDispositivo + ", nombre=" + nombre + ", estado=" + estado
+				+ ", unidades=" + unidades + "]";
+	}
+		
 }

@@ -9,7 +9,24 @@ export const AddUnitButton = ({
   const [unitName, setDeviceName] = useState("");
   const [isVisible, setIsVisible] = useState(false);
 
+  const fetchDispositivos = async () => {
+    const response = await fetch(
+      "http://localhost:8080/dispositivo/dispositivos",
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    const data = await response.json();
+    console.log(data);
+  };
+
   const handleModal = () => {
+    fetch("http://localhost:8080/dispositivo/dispositivos").then((elemento) => {
+      console.log(elemento.json);
+    });
     setIsVisible((prev) => !prev);
   };
 
@@ -22,14 +39,14 @@ export const AddUnitButton = ({
     <>
       <button
         className={`flex items-center justify-center p-2  border-2 border-slate-950 rounded-lg cursor-pointer bg-slate-950 h-fit`}
-        onClick={handleModal}
+        onClick={fetchDispositivos}
       >
         Agregar unidad
       </button>
       <Modal
         title="Agregar Unidad"
         isVisible={isVisible}
-        handleClose={handleModal}
+        handleClose={fetchDispositivos}
       >
         <>
           <input
