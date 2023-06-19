@@ -14,12 +14,9 @@ export const AddUnitButton = ({
       "http://localhost:8080/dispositivo/dispositivos",
       {
         method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
       }
     );
-    const data = await response.json();
+    const data = await response.text();
     console.log(data);
   };
 

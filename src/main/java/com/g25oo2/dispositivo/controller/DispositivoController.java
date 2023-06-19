@@ -14,7 +14,6 @@ import com.g25oo2.dispositivo.service.DispositivoService;
 
 
 @RestController
-@CrossOrigin(origins = "*")
 @RequestMapping("/dispositivo")
 public class DispositivoController {
 	@Autowired

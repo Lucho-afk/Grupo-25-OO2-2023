@@ -6,7 +6,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.view.RedirectView;
 
 @RestController
-@CrossOrigin(origins = "*")
 public class LayoutController {
 	@GetMapping("/")
 	public RedirectView redireccion() {
