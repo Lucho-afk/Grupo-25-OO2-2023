@@ -10,18 +10,15 @@ export const AddUnitButton = ({
   const [isVisible, setIsVisible] = useState(false);
 
   const fetchDispositivos = async () => {
-    const response = await fetch(
-      "http://localhost:8080/dispositivo/dispositivos",
-      {
-        method: "GET",
-      }
-    );
+    const response = await fetch("http://localhost:8080/api/dispositivos", {
+      method: "GET",
+    });
     const data = await response.text();
     console.log(data);
   };
 
   const handleModal = () => {
-    fetch("http://localhost:8080/dispositivo/dispositivos").then((elemento) => {
+    fetch("http://localhost:8080/api/dispositivos").then((elemento) => {
       console.log(elemento.json);
     });
     setIsVisible((prev) => !prev);
