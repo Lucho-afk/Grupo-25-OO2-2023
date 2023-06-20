@@ -10,7 +10,7 @@ public interface UnidadService {
 	
 	public void guardar(Unidad unidad);
 	
-	public void eliminar(Unidad unidad);
+	public void eliminar(String id) throws Exception;
 	
 	
 

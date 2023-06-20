@@ -32,8 +32,13 @@ public class EventoController {
 	}
 	
 	@DeleteMapping("/evento")
-	public void borrarEvento(@RequestBody Evento body) {
-		eventoService.eliminar(body);
+	public void borrarEvento(@RequestBody int body) {
+		try {
+			eventoService.eliminar(body);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 }

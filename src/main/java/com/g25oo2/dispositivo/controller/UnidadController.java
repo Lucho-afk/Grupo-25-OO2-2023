@@ -37,8 +37,13 @@ public class UnidadController {
 	}
 	
 	@DeleteMapping("/unidad")
-	public void borrarUnidad(@RequestBody Unidad body) {
-		unidadService.eliminar(body);
+	public void borrarUnidad(@RequestBody String body) {
+		try {
+			unidadService.eliminar(body);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 }

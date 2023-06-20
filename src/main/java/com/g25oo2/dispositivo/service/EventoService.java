@@ -10,7 +10,7 @@ public interface EventoService {
 	
 	public void guardar(Evento evento);
 	
-	public void eliminar(Evento evento);
+	public void eliminar(int id) throws Exception;
 	
 	
 
