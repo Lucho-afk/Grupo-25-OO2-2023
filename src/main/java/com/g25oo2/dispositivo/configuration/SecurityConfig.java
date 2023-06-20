@@ -1,5 +1,7 @@
 package com.g25oo2.dispositivo.configuration;
 
+import java.util.Arrays;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -9,6 +11,7 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
+import org.springframework.web.cors.CorsConfiguration;
 
 @Configuration
 @EnableWebSecurity
@@ -37,14 +40,22 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .cors()
                 .and()
                 .authorizeRequests()
-                // Configura las rutas que requieren autenticación y autorización
+                .antMatchers("/dispositivo/*").permitAll()
                 .anyRequest().authenticated()
                 .and()
-                // Configura el formulario de inicio de sesión
                 .formLogin()
                 .and()
-                // Configura el manejo de errores de acceso denegado
                 .exceptionHandling()
-                .accessDeniedPage("/access-denied");
+                .accessDeniedPage("/access-denied")
+                .and()
+                .cors() // Agrega la configuración de CORS
+                .configurationSource(request -> {
+                    CorsConfiguration cors = new CorsConfiguration();
+                    cors.setAllowedOriginPatterns(Arrays.asList("*"));
+                    cors.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE"));
+                    cors.setAllowedHeaders(Arrays.asList("Content-Type", "Authorization"));
+                    cors.setAllowCredentials(true);
+                    return cors;
+                });
     }
 }
