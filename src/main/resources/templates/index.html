@@ -1,20 +1,263 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    <h1 th:text="${nombre}"></h1>
-    <div th:if = "${dispositivos != null and !dispositivos.empty}"> <!--informacion que salva vidas: todo entre comillas y las condiciones igual que en java  -->
-        
-        <div th:each="dispositivo : ${dispositivos}">
-            <p th:text="${dispositivo.getNombre()}"></p>
+<html
+  lang="en"
+  xmlns:th="http://www.thymeleaf.org"
+  xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css"
+    />
+
+    <title>Dispositivos</title>
+  </head>
+  <body class="container">
+    <h3 class="title">Dispositivos</h3>
+    <form action="" id="dispositivos"></form>
+    <h3 class="title">Unidades</h3>
+    <div class="unidades"></div>
+
+    <dialog id="eventoModal">
+      <form method="dialog">
+        <div class="innerModal">
+          <menu>
+            <button id="cancel" type="reset">Cancel</button>
+          </menu>
+          <section id="modalData"></section>
         </div>
-    </div>
-    <div th:if="${dispositivos == null or dispositivos.empty}">
-        <p>vacio</p>
-    </div>
-</body>
+      </form>
+    </dialog>
+
+    <script th:inline="javascript">
+      const fetchDispositivos = async () => {
+        const response = await fetch("/api/dispositivos");
+        const data = await response.json();
+        return data;
+      };
+
+      const fetchUnidades = async () => {
+        const response = await fetch("/api/unidad"); // implementar filtros
+        const data = await response.json();
+        return data;
+      };
+
+      const fetchEventos = async (unidadId) => {
+        const response = await fetch("/api/evento"); // implementar filtros
+        const data = await response.json();
+        return data;
+      };
+
+      const deleteUnit = async (unitId) => {
+        console.log("deleteButton", unitId);
+        // const response = await fetch(`/api/unidad/${unitId}`, {
+        //   method: "DELETE",
+        // });
+        // const data = await response.json();
+        // return data;
+      };
+
+      const capitalize = (str = "") => {
+        return str.charAt(0).toUpperCase() + str.slice(1);
+      };
+
+      const DEVICE_TO_ICON = {
+        "estacionamiento inteligente": `
+        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-car-front" viewBox="0 0 16 16">
+            <path d="M4 9a1 1 0 1 1-2 0 1 1 0 0 1 2 0Zm10 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0ZM6 8a1 1 0 0 0 0 2h4a1 1 0 1 0 0-2H6ZM4.862 4.276 3.906 6.19a.51.51 0 0 0 .497.731c.91-.073 2.35-.17 3.597-.17 1.247 0 2.688.097 3.597.17a.51.51 0 0 0 .497-.731l-.956-1.913A.5.5 0 0 0 10.691 4H5.309a.5.5 0 0 0-.447.276Z"/>
+            <path d="M2.52 3.515A2.5 2.5 0 0 1 4.82 2h6.362c1 0 1.904.596 2.298 1.515l.792 1.848c.075.175.21.319.38.404.5.25.855.715.965 1.262l.335 1.679c.033.161.049.325.049.49v.413c0 .814-.39 1.543-1 1.997V13.5a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1-.5-.5v-1.338c-1.292.048-2.745.088-4 .088s-2.708-.04-4-.088V13.5a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1-.5-.5v-1.892c-.61-.454-1-1.183-1-1.997v-.413a2.5 2.5 0 0 1 .049-.49l.335-1.68c.11-.546.465-1.012.964-1.261a.807.807 0 0 0 .381-.404l.792-1.848ZM4.82 3a1.5 1.5 0 0 0-1.379.91l-.792 1.847a1.8 1.8 0 0 1-.853.904.807.807 0 0 0-.43.564L1.03 8.904a1.5 1.5 0 0 0-.03.294v.413c0 .796.62 1.448 1.408 1.484 1.555.07 3.786.155 5.592.155 1.806 0 4.037-.084 5.592-.155A1.479 1.479 0 0 0 15 9.611v-.413c0-.099-.01-.197-.03-.294l-.335-1.68a.807.807 0 0 0-.43-.563 1.807 1.807 0 0 1-.853-.904l-.792-1.848A1.5 1.5 0 0 0 11.18 3H4.82Z"/>
+            </svg>`,
+        "aspersor inteligente": '<i class="bi bi-tree"></i>',
+        "luces automaticas": '<i class="bi bi-lightbulb"></i>',
+        "recolector inteligente": '<i class="bi bi-trash"></i>',
+      };
+
+      const DEVICENAME_TO_FANCYNAME = {
+        "estacionamiento inteligente": "Parking",
+        "aspersor inteligente": "Aspersor",
+        "luces automaticas": "Luces",
+        "recolector inteligente": "Recolector",
+      };
+
+      const listEventos = async (unidadId) => {
+        const modal = document.querySelector("#eventoModal");
+        const modalData = document.querySelector("#modalData");
+        const eventos = await fetchEventos(unidadId);
+        modalData.innerHTML = "";
+        for (const evento of eventos) {
+          modalData.innerHTML += `
+            <div class='evento'>
+                <h3>${evento.descripcion}</h3>
+                <p>${evento.fechaHora}</p>
+            </div>
+          `;
+        }
+        modal.showModal();
+        console.log(unidadId);
+        const cancel = document.getElementById("cancel");
+        cancel.addEventListener("click", () => {
+          const modal = document.querySelector("#eventoModal");
+          modal.close();
+        });
+      };
+
+      const listUnidades = async () => {
+        const unidades = await fetchUnidades();
+
+        const unidadesContainer = document.querySelector(".unidades");
+        unidadesContainer.innerHTML = "<div class='unidades'></div>";
+        for (const unidad of unidades) {
+          console.log(unidad);
+          unidadesContainer.innerHTML += unitItem(unidad);
+        }
+      };
+
+      const unitItem = (unidad) => {
+        const id = unidad.id;
+        return `
+            <div class='unidad'>
+                <h3  onclick="listEventos('${id}')">${capitalize(id)}</h3>
+                <button class='deleteButton' onclick="deleteUnit('${id}')"><i class="bi bi-trash"></i></button>
+            </div>
+            `;
+      };
+
+      const deviceItem = (dispositivo) => {
+        const id = dispositivo.id;
+        const icon = DEVICE_TO_ICON[dispositivo.nombre];
+        const name = DEVICENAME_TO_FANCYNAME[dispositivo.nombre];
+        return `<label for='${dispositivo.id}'>${icon}${name}</label>`;
+      };
+
+      const listOfDevices = async () => {
+        const form = document.getElementById("dispositivos");
+        const dispositivos = await fetchDispositivos();
+
+        for (dispositivo of dispositivos) {
+          const id = dispositivo.id;
+          form.innerHTML += `
+            <input type="radio" name="dispositivo" onclick="listUnidades()" id='${id}'/>
+            ${deviceItem(dispositivo)}
+            `;
+        }
+      };
+
+      listOfDevices();
+    </script>
+
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      }
+
+      body {
+        background-color: #f8fafc;
+      }
+      form {
+        display: flex;
+        flex-direction: row;
+        gap: 1rem;
+      }
+      input {
+        display: none;
+      }
+      label {
+        gap: 0.5rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        padding: 1rem;
+        border: 2px solid #020617;
+        border-radius: 1rem;
+        cursor: pointer;
+        max-width: 7rem;
+        min-width: 7rem;
+        text-align: center;
+        text-overflow: ellipsis;
+        transition: all 0.3s ease;
+      }
+      label .bi {
+        font-size: 1.5rem;
+      }
+      input:checked + label {
+        background-color: #020617;
+        color: #fff;
+      }
+      .unidades {
+        display: flex;
+        flex-direction: column;
+        flex-wrap: wrap;
+        gap: 1rem;
+        margin-top: 1rem;
+      }
+
+      .unidades button {
+        padding: 1rem;
+        color: #fff;
+        background-color: #ef4444;
+        border: none;
+        border-radius: 8px;
+        font-size: 1.2rem;
+      }
+
+      .unidades .unidad {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        background-color: #edf0f5;
+        padding: 1rem;
+        border-radius: 8px;
+      }
+
+      .container {
+        margin-left: auto;
+        margin-right: auto;
+        max-width: 100%;
+        padding-left: 1rem;
+        padding-right: 1rem;
+      }
+
+      #eventoModal {
+        width: 90%;
+        margin-left: auto;
+        @media (min-width: 768px) {
+          width: 30%;
+        }
+      }
+
+      #modalData {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+      }
+
+      #modalData .evento {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        padding: 1rem;
+        border-radius: 8px;
+        background-color: #edf0f5;
+        width: 100%;
+      }
+
+      #modalData .evento p {
+        color: #64748b;
+      }
+
+      .innerModal {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        width: 100%;
+      }
+    </style>
+  </body>
 </html>
