@@ -1,5 +1,6 @@
 package com.g25oo2.dispositivo.controller;
 
+
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -9,7 +10,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.g25oo2.dispositivo.entity.Dispositivo;
 import com.g25oo2.dispositivo.entity.Unidad;
+import com.g25oo2.dispositivo.service.DispositivoService;
 import com.g25oo2.dispositivo.service.UnidadService;
 
 import lombok.extern.slf4j.Slf4j;
@@ -17,33 +21,23 @@ import lombok.extern.slf4j.Slf4j;
 @RestController
 @Slf4j
 @RequestMapping("/api")
-public class UnidadController {
+public class DispositivoController {
 	@Autowired
-	UnidadService unidadService;
+	DispositivoService dispositivoService;
 
-	@GetMapping("/unidad")
-	public List<Unidad> traerUnidades() {
-		List<Unidad> aux = unidadService.traer();
+	@GetMapping("/dispositivos")
+	public List<Dispositivo> traerDispositivos() {
+		List<Dispositivo> aux = dispositivoService.traer();
 		return aux;
 	}
 
-	@PostMapping("/unidad")
-	public void crearUnidad(@RequestBody Unidad body) {
-		unidadService.guardar(body);
-	}
-
-	@DeleteMapping("/unidad")
-	public void borrarUnidad(@RequestBody String body) {
+	@DeleteMapping("/dispositivo")
+	public void borrarDispositivo(@RequestBody int body) {
 		try {
-			unidadService.eliminar(body);
+			dispositivoService.eliminar(body);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-	}
-
-	@GetMapping("/unidadXNombre")
-	public List<Unidad> filtroPorNombre(@RequestBody int body) {
-		return null;// desarrollar filtro de unidades por id de dispositivo.
 	}
 
 }

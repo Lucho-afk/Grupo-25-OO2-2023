@@ -17,7 +17,7 @@ import com.g25oo2.dispositivo.service.EventoService;
 
 import lombok.extern.slf4j.Slf4j;
 
-@Controller
+@RestController
 @Slf4j
 @RequestMapping("/api")
 public class EventoController {
