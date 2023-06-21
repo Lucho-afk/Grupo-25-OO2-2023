@@ -1,5 +1,6 @@
 package com.g25oo2.dispositivo.controller;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,5 +41,18 @@ public class EventoController {
 			e.printStackTrace();
 		}
 	}
+	@GetMapping("/eventoXfechas")
+	public List<Evento> traerEventosXfechas(@RequestBody LocalDate fechaDesde,@RequestBody LocalDate fechaHasta){
+		return null; //filtro que traiga evento por fechas
+	}
 	
+	@GetMapping("/eventosXunidad")
+	public List<Evento> eventosXUnidad(@RequestBody String body){
+		return null; //implementar filtro  que traiga una lista de eventos por unidad.
+	}
+	
+	@GetMapping("/eventosXunidad")
+	public List<Evento> eventosXUnidadEntreFechas(@RequestBody String body,@RequestBody LocalDate fechaDesde,@RequestBody LocalDate fechaHasta){
+		return null; //implementar filtro  que traiga una lista de eventos por unidad, entre un rango de fechas.
+	}
 }

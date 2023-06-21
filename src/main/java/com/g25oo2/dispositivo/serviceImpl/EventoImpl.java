@@ -1,10 +1,15 @@
 package com.g25oo2.dispositivo.serviceImpl;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.g25oo2.dispositivo.entity.Dispositivo;
 import com.g25oo2.dispositivo.entity.Evento;
@@ -16,10 +21,15 @@ public class EventoImpl implements EventoService {
 	@Autowired
 	EventoDao daoEvento;
 
-	@Override
+
 	public List<Evento> traer() {
-		return daoEvento.findAll();
+		List<Evento> lstDispositivos = daoEvento.findAll();
+		List<Evento> lstActivos =lstDispositivos.stream()
+										.filter(disp -> disp.getEstado()!= 0)
+										.collect(Collectors.toList());
+		return lstActivos;
 	}
+	
 
 	@Override
 	public void guardar(Evento evento) {
@@ -39,7 +49,9 @@ public class EventoImpl implements EventoService {
 		
 	}
 
-	
+	public List<Evento> traerEventosXfechas(@RequestBody LocalDate fechaDesde,@RequestBody LocalDate fechaHasta){
+		return null; //filtro que traiga evento por fechas
+	}
 	
 	
 }

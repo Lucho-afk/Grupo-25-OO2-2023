@@ -1,7 +1,12 @@
 package com.g25oo2.dispositivo.serviceImpl;
 
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,7 +21,11 @@ public class DispositivoImpl implements DispositivoService{
 	DispositivoDao daoDispositivo;
 	
 	public List<Dispositivo> traer() {
-		return daoDispositivo.findAll();
+		List<Dispositivo> lstDispositivos = daoDispositivo.findAll();
+		List<Dispositivo> lstActivos =lstDispositivos.stream()
+										.filter(disp -> disp.getEstado()!= 0)
+										.collect(Collectors.toList());
+		return lstActivos;
 	}
 	
 	public void eliminar(int id) throws Exception {
