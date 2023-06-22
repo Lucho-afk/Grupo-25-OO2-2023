@@ -40,6 +40,8 @@ public class UnidadController {
 
 	@PostMapping("/unidad/Crear")
 	public void crearUnidad(@RequestBody Unidad body) {
+		System.out.println("body");
+		System.out.println(body);
 		try {
 			unidadService.guardar(body);
 		} catch (Exception e) {

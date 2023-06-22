@@ -17,7 +17,7 @@
   </head>
   <body class="container">
     <h3 class="title">Dispositivos</h3>
-    <form action="" id="dispositivos"></form>
+    <div action="" id="dispositivos"></div>
     <h3 class="title">Unidades</h3>
     <div class="unidades"></div>
 
@@ -30,6 +30,41 @@
           <section id="modalData"></section>
         </div>
       </form>
+    </dialog>
+
+    <iframe
+      name="hiddenFrame"
+      width="0"
+      height="0"
+      border="0"
+      style="display: none"
+    ></iframe>
+
+    <dialog id="crearModal">
+      <div class="crearModalInterior">
+        <menu>
+          <button id="cancel" type="reset">Cancel</button>
+        </menu>
+        <h1>crear unidad</h1>
+        <div class="modalData">
+          <form target="hiddenFrame" action="/unidad/Crear" method="post">
+            <input
+              type="text"
+              placeholder="Nombre de la unidad"
+              name="id"
+              required
+            />
+            <input name="estado" hidden type="int" value="1" required />
+            <input
+              type="int"
+              hidden
+              name="idDispositivo"
+              id="idDispositivoInput"
+            />
+            <input type="submit" value="Crear" />
+          </form>
+        </div>
+      </div>
     </dialog>
 
     <script th:inline="javascript">
@@ -115,13 +150,37 @@
 
       const listUnidades = async (idDispositivo) => {
         const unidades = await fetchUnidades(idDispositivo);
+        const idDispositivoInput = document.querySelector(
+          "#idDispositivoInput"
+        );
+
+        console.log(idDispositivo);
+
+        if (idDispositivoInput) {
+          idDispositivoInput.value = idDispositivo;
+        }
 
         const unidadesContainer = document.querySelector(".unidades");
-        unidadesContainer.innerHTML = "<div class='unidades'></div>";
+        unidadesContainer.innerHTML = `
+          <div class='unidades'>
+            <button class="add" onclick='createUnidad()'>Agregar Unidad</button>
+          </div>`;
         for (const unidad of unidades) {
           console.log(unidad);
           unidadesContainer.innerHTML += unitItem(unidad);
         }
+      };
+
+      const createUnidad = async () => {
+        const modal = document.querySelector("#crearModal");
+        const modalData = document.querySelector(".modalData");
+
+        modal.showModal();
+        const cancel = document.getElementById("cancel");
+        cancel.addEventListener("click", () => {
+          const modal = document.querySelector("#crearModal");
+          modal.close();
+        });
       };
 
       const unitItem = (unidad) => {
@@ -148,7 +207,7 @@
         for (dispositivo of dispositivos) {
           const id = dispositivo.id;
           form.innerHTML += `
-            <input type="radio" name="dispositivo" onclick="listUnidades('${id}')" id='${id}'/>
+            <input hidden type="radio" name="dispositivo" onclick="listUnidades('${id}')" id='${id}'/>
             ${deviceItem(dispositivo)}
             `;
         }
@@ -168,13 +227,10 @@
       body {
         background-color: #f8fafc;
       }
-      form {
+      #dispositivos {
         display: flex;
         flex-direction: row;
         gap: 1rem;
-      }
-      input {
-        display: none;
       }
       label {
         gap: 0.5rem;
@@ -214,6 +270,7 @@
         border: none;
         border-radius: 8px;
         font-size: 1.2rem;
+        cursor: pointer;
       }
 
       .unidades .unidad {
@@ -267,6 +324,13 @@
         flex-direction: column;
         gap: 1rem;
         width: 100%;
+      }
+
+      .add {
+        background-color: #020617 !important;
+        font-weight: 500;
+        width: fit-content;
+        font-size: 1rem !important;
       }
     </style>
   </body>
