@@ -6,8 +6,6 @@ import java.util.stream.Collectors;
 import javax.annotation.security.RolesAllowed;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.annotation.Secured;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -45,10 +43,10 @@ public class UnidadController {
 		unidadService.guardar(body);
 	}
 
-	@DeleteMapping("/unidad/Eliminar")
-	public void borrarUnidad(@RequestBody String body) {
+	@PostMapping("/unidad/Eliminar")
+	public void borrarUnidad(@RequestBody Unidad body) {
 		try {
-			unidadService.eliminar(body);
+			unidadService.eliminar(body.getId());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

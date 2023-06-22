@@ -51,12 +51,19 @@
       };
 
       const deleteUnit = async (unitId) => {
+        let unidad = {
+          id:""+unitId 
+        }
         console.log("deleteButton", unitId);
-        // const response = await fetch(`/api/unidad/${unitId}`, {
-        //   method: "DELETE",
-        // });
-        // const data = await response.json();
-        // return data;
+        const response = await fetch(`/api/unidad/Eliminar`, {
+          method: 'POST',
+         headers: {
+        'Content-Type': 'application/json',
+        },
+           body: JSON.stringify(unidad)
+        });
+        const data = await response.json();
+        return data;
       };
 
       const capitalize = (str = "") => {
