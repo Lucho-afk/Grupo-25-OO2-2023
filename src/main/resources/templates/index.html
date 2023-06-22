@@ -7,6 +7,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="css/style.css" />
     <link
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css"
@@ -39,7 +40,9 @@
       };
 
       const fetchUnidades = async (idDispositivo) => {
-        const response = await fetch(`/api/unidadesDeDispositivo?dispositivo=${idDispositivo}`); // implementar filtros
+        const response = await fetch(
+          `/api/unidadesDeDispositivo?dispositivo=${idDispositivo}`
+        ); // implementar filtros
         const data = await response.json();
         return data;
       };
@@ -52,15 +55,15 @@
 
       const deleteUnit = async (unitId) => {
         let unidad = {
-          id:""+unitId 
-        }
+          id: "" + unitId,
+        };
         console.log("deleteButton", unitId);
         const response = await fetch(`/api/unidad/Eliminar`, {
-          method: 'POST',
-         headers: {
-        'Content-Type': 'application/json',
-        },
-           body: JSON.stringify(unidad)
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(unidad),
         });
         const data = await response.json();
         return data;
