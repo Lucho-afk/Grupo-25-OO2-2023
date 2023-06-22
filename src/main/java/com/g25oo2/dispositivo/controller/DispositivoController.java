@@ -1,6 +1,5 @@
 package com.g25oo2.dispositivo.controller;
 
-
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -31,7 +30,7 @@ public class DispositivoController {
 		return aux;
 	}
 
-	@DeleteMapping("/dispositivo")
+	@DeleteMapping("/dispositivo/Eliminar")
 	public void borrarDispositivo(@RequestBody int body) {
 		try {
 			dispositivoService.eliminar(body);

@@ -38,8 +38,8 @@
         return data;
       };
 
-      const fetchUnidades = async () => {
-        const response = await fetch("/api/unidad"); // implementar filtros
+      const fetchUnidades = async (idDispositivo) => {
+        const response = await fetch(`/api/unidadesDeDispositivo?dispositivo=${idDispositivo}`); // implementar filtros
         const data = await response.json();
         return data;
       };
@@ -103,8 +103,8 @@
         });
       };
 
-      const listUnidades = async () => {
-        const unidades = await fetchUnidades();
+      const listUnidades = async (idDispositivo) => {
+        const unidades = await fetchUnidades(idDispositivo);
 
         const unidadesContainer = document.querySelector(".unidades");
         unidadesContainer.innerHTML = "<div class='unidades'></div>";
@@ -138,7 +138,7 @@
         for (dispositivo of dispositivos) {
           const id = dispositivo.id;
           form.innerHTML += `
-            <input type="radio" name="dispositivo" onclick="listUnidades()" id='${id}'/>
+            <input type="radio" name="dispositivo" onclick="listUnidades('${id}')" id='${id}'/>
             ${deviceItem(dispositivo)}
             `;
         }

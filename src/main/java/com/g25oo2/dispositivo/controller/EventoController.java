@@ -30,12 +30,12 @@ public class EventoController {
 		return aux;
 	}
 
-	@PostMapping("/evento")
+	@PostMapping("/evento/Crear")
 	public void crearEvento(@RequestBody Evento body) {
 		eventoService.guardar(body);
 	}
 
-	@DeleteMapping("/evento")
+	@DeleteMapping("/evento/Eliminar")
 	public void borrarEvento(@RequestBody int body) {
 		try {
 			eventoService.eliminar(body);

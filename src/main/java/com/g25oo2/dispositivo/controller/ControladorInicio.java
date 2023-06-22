@@ -22,8 +22,7 @@ public class ControladorInicio {
 
     @GetMapping("/")
     public String traerDispositivos(Model model) {
-        model.addAttribute("dispositivos", dispositivoService.traer());
-        model.addAttribute("nombre", "javier");
+        // model.addAttribute("usuario", "user");
         return "index";
     }
 }

@@ -1,7 +1,13 @@
 package com.g25oo2.dispositivo.controller;
 
 import java.util.List;
+import java.util.stream.Collectors;
+
+import javax.annotation.security.RolesAllowed;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -9,8 +15,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.g25oo2.dispositivo.entity.Dispositivo;
 import com.g25oo2.dispositivo.entity.Unidad;
+import com.g25oo2.dispositivo.service.DispositivoService;
 import com.g25oo2.dispositivo.service.UnidadService;
 
 import lombok.extern.slf4j.Slf4j;
@@ -21,19 +31,21 @@ import lombok.extern.slf4j.Slf4j;
 public class UnidadController {
 	@Autowired
 	UnidadService unidadService;
+	DispositivoService dispositivoService;
 
 	@GetMapping("/unidad")
 	public List<Unidad> traerUnidades() {
 		List<Unidad> aux = unidadService.traer();
+
 		return aux;
 	}
 
-	@PostMapping("/unidad")
+	@PostMapping("/unidad/Crear")
 	public void crearUnidad(@RequestBody Unidad body) {
 		unidadService.guardar(body);
 	}
 
-	@DeleteMapping("/unidad")
+	@DeleteMapping("/unidad/Eliminar")
 	public void borrarUnidad(@RequestBody String body) {
 		try {
 			unidadService.eliminar(body);
@@ -42,11 +54,12 @@ public class UnidadController {
 		}
 	}
 
-	@GetMapping("/api/unidadesDeDispositivo/{id}")
-	public List<Unidad> traerUnidadesDeDispositivo(@PathVariable("id") int id) {
-	System.out.println(id);
-	System.out.println("wea");
-	return unidadService.traer(); // desarrollar filtro de unidades por id de dispositivo.
+	@GetMapping("/unidadesDeDispositivo")
+	public List<Unidad> traerUnidadesDeDispositivo(@RequestParam int dispositivo) {
+		List<Unidad> lstActivos = unidadService.traer().stream()
+				.filter(unidad -> unidad.getDispositivo().getId() == dispositivo)
+				.collect(Collectors.toList());
+		return lstActivos; // desarrollar filtro de unidades por id de dispositivo.
 	}
 
 }
