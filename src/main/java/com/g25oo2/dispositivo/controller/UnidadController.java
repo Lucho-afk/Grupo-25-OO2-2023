@@ -40,7 +40,11 @@ public class UnidadController {
 
 	@PostMapping("/unidad/Crear")
 	public void crearUnidad(@RequestBody Unidad body) {
-		unidadService.guardar(body);
+		try {
+			unidadService.guardar(body);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	@PostMapping("/unidad/Eliminar")

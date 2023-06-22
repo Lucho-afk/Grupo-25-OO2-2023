@@ -23,9 +23,14 @@ public class UnidadImpl implements UnidadService {
 	}
 
 	@Override
-	public void guardar(Unidad unidad) {
-		daoUnidad.save(unidad);
-		
+	public void guardar(Unidad unidad) throws Exception  {
+		Optional<Unidad> aux = daoUnidad.findById(unidad.getId());
+		if (aux.isPresent()) {
+			throw new Exception("Esta unidad ya existe");
+		} else {
+			daoUnidad.save(unidad);
+
+		}
 	}
 
 	public void eliminar(String id) throws Exception {

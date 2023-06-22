@@ -8,7 +8,7 @@ public interface UnidadService {
 	
 	public List<Unidad> traer();
 	
-	public void guardar(Unidad unidad);
+	public void guardar(Unidad unidad) throws Exception;
 	
 	public void eliminar(String id) throws Exception;
 	
