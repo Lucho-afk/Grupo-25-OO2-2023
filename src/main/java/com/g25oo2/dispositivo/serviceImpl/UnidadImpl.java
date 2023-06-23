@@ -36,7 +36,13 @@ public class UnidadImpl implements UnidadService {
 		if (aux.isPresent()) {
 			throw new Exception("Esta unidad ya existe");
 		} else {
-			Unidad unidad = new Unidad(body.getNombreUnidad(),1,dispositivoService.traer(body.getIdDispositivo()));
+			Unidad unidad = new Unidad();
+			
+//			body.getNombreUnidad(),1,dispositivoService.traer(body.getIdDispositivo())
+			
+			unidad.setDispositivo(dispositivoService.traer(body.getIdDispositivo()));
+			unidad.setEstado(1);
+			unidad.setId(body.getNombreUnidad());
 			daoUnidad.save(unidad);
 		}
 	}

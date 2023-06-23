@@ -55,11 +55,5 @@ public class Unidad {
 	public void setDispositivo(Dispositivo dispositivo) {
 		this.dispositivo = dispositivo;
 	}
-
-	public Unidad(String idUnidad, int estado, Dispositivo dispositivo) {
-		this.idUnidad = idUnidad;
-		this.estado = estado;
-		this.dispositivo = dispositivo;
-	}
 	
 }

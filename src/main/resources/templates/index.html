@@ -74,6 +74,11 @@
       </div>
     </dialog>
 
+    <dialog class="errorModal">
+      <h3>Error</h3>
+      <p id="mensajeDeErrorParaModal"></p>
+    </dialog>
+
     <script th:inline="javascript">
       const fetchDispositivos = async () => {
         const response = await fetch("/api/dispositivos");
@@ -81,23 +86,35 @@
         return data;
       };
 
+      const throwError = (error) => {
+        document.getElementById("mensajeDeErrorParaModal").innerText = error;
+        document.querySelector(".errorModal").showModal();
+      };
+
       const agregarUnidad = async () => {
         const name = document.querySelector("#nombreAgregarUnidad");
         const dispositivo = document.querySelector("#idDispositivoInput");
 
         console.log("agregarUnidad", name.value, dispositivo.value);
+        const unidadesContainer = document.querySelector(".unidades");
 
-        fetch("/api/unidad/Crear", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
+        try {
+          await fetch("/api/unidad/Crear", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              nombreUnidad: name.value,
+              idDispositivo: dispositivo.value,
+            }),
+          });
+          unidadesContainer.innerHTML += unitItem({
             id: name.value,
-            estado: 1,
-            dispositivo: dispositivo.value,
-          }),
-        });
+          });
+        } catch (error) {
+          console.log(error);
+        }
       };
 
       const fetchUnidades = async (idDispositivo) => {
@@ -156,6 +173,7 @@
         const modal = document.querySelector("#eventoModal");
         const modalData = document.querySelector("#modalData");
         const eventos = await fetchEventos(unidadId);
+
         modalData.innerHTML = "";
         for (const evento of eventos) {
           modalData.innerHTML += `
@@ -229,6 +247,8 @@
       const listOfDevices = async () => {
         const form = document.getElementById("dispositivos");
         const dispositivos = await fetchDispositivos();
+
+        throwError("tu mama");
 
         for (dispositivo of dispositivos) {
           const id = dispositivo.id;
@@ -362,6 +382,19 @@
 
       .jose {
         display: block;
+      }
+
+      .errorModal {
+        background-color: #fca5a5;
+        color: #7f1d1d;
+        border: none;
+        border-radius: 8px;
+        padding: 1rem;
+        position: absolute;
+      }
+
+      .errorModal p {
+        color: #450a0a;
       }
     </style>
   </body>
