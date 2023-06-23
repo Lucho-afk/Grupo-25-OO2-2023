@@ -12,5 +12,9 @@ public interface DispositivoService {
 	public List<Dispositivo> traer();
 	
 	public void eliminar(int id) throws Exception;
+	
+	public void modificar(Dispositivo dispositivo, int id)throws Exception;
+	
+	
 
 }

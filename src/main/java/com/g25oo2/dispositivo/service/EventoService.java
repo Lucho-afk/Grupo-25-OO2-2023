@@ -12,6 +12,8 @@ public interface EventoService {
 	
 	public void eliminar(int id) throws Exception;
 	
+	public void modificar(Evento evento, int id) throws Exception;
+	
 	
 
 }

@@ -39,6 +39,23 @@ public class DispositivoImpl implements DispositivoService{
 	 }
 	 
 	}
+
+	@Override
+	public void modificar(Dispositivo dispositivo, int id) throws Exception {
+		 Optional<Dispositivo> aux = daoDispositivo.findById(id);
+		 if(aux.isPresent()) {
+			 Dispositivo dispositivoAux = aux.get();
+			 if(dispositivoAux.equals(dispositivo)) {
+				 throw new Exception("el dispositivo que se quiere ingresar es igual al de la base de datos");
+			 }else {
+				 daoDispositivo.save(dispositivo);
+			 }
+		 }else {
+			 throw new Exception("el dispositivo que se quiere modificar no existe en la base de datos");
+		 }
+		
+		
+	}
 	
 
 }

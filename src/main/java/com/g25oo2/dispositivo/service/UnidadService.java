@@ -12,6 +12,6 @@ public interface UnidadService {
 	
 	public void eliminar(String id) throws Exception;
 	
-	
+	public void modificar(Unidad unidad, String id)throws Exception;
 
 }

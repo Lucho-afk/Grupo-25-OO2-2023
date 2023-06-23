@@ -5,6 +5,8 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import com.g25oo2.dispositivo.entity.Dispositivo;
 import com.g25oo2.dispositivo.entity.Unidad;
 import com.g25oo2.dispositivo.repository.UnidadDao;
 import com.g25oo2.dispositivo.service.UnidadService;
@@ -43,6 +45,24 @@ public class UnidadImpl implements UnidadService {
 			 throw new Exception("No existe el Unidad a eliminar");
 		 }
 	}
+
+	@Override
+	public void modificar(Unidad unidad, String id) throws Exception {
+		 Optional<Unidad> aux = daoUnidad.findById(id);
+		 if(aux.isPresent()) {
+			 Unidad unidadAux = aux.get();
+			 if(unidadAux.equals(unidad)) {
+				 throw new Exception("el unidad que se quiere ingresar es igual al de la base de datos");
+			 }else {
+				 daoUnidad.save(unidad);
+			 }
+		 }else {
+			 throw new Exception("el unidad que se quiere modificar no existe en la base de datos");
+		 }
+		
+	}
+	
+	
 
 	
 	
