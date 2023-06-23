@@ -41,7 +41,7 @@ public class SecurityConfig {
         http.csrf().disable()
                 .authorizeRequests()
                 .antMatchers("/").hasRole("USER")
-                .antMatchers("/api/dispositivos", "/api/evento", "/api/unidadesDeDispositivo", "/api/unidad/Eliminar")
+                .antMatchers("/api/dispositivos", "/api/evento", "/api/unidadesDeDispositivo", "/api/unidad/Eliminar", "/api/eventosXunidad")
                 .hasRole("ADMIN")
                 .anyRequest()
                 .authenticated()

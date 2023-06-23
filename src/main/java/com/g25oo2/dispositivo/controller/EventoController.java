@@ -1,7 +1,9 @@
 package com.g25oo2.dispositivo.controller;
 
 import java.time.LocalDate;
+import java.util.Iterator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -10,9 +12,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.g25oo2.dispositivo.entity.Evento;
+import com.g25oo2.dispositivo.entity.Unidad;
 import com.g25oo2.dispositivo.service.EventoService;
 
 import lombok.extern.slf4j.Slf4j;
@@ -51,9 +55,12 @@ public class EventoController {
 	}
 
 	@GetMapping("/eventosXunidad")
-	public List<Evento> eventosXUnidad(@RequestBody String body) {
-		return null; // implementar filtro que traiga una lista de eventos por
-		// unidad.
+	public List<Evento> eventosXUnidad(@RequestParam String nombreUnidad) {
+		List<Evento> lstActivos = eventoService.traer().stream()
+				.filter(evento -> evento.getUnidad().getId().equals(nombreUnidad))
+				.collect(Collectors.toList());
+		
+		return lstActivos;
 	}
 
 	@GetMapping("/eventosXunidadEntreFechas")

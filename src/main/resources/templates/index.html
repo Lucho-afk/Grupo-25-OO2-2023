@@ -126,8 +126,12 @@
       };
 
       const fetchEventos = async (unidadId) => {
-        const response = await fetch("/api/evento"); // implementar filtros
+        const response = await fetch(
+          `api/eventosXunidad?nombreUnidad=${unidadId}`
+        );
+        console.log({ response });
         const data = await response.json();
+        console.log({ data });
         return data;
       };
 
@@ -172,6 +176,7 @@
       const listEventos = async (unidadId) => {
         const modal = document.querySelector("#eventoModal");
         const modalData = document.querySelector("#modalData");
+
         const eventos = await fetchEventos(unidadId);
 
         modalData.innerHTML = "";
@@ -247,8 +252,6 @@
       const listOfDevices = async () => {
         const form = document.getElementById("dispositivos");
         const dispositivos = await fetchDispositivos();
-
-        throwError("tu mama");
 
         for (dispositivo of dispositivos) {
           const id = dispositivo.id;
