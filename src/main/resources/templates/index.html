@@ -22,38 +22,34 @@
     <div class="unidades"></div>
 
     <dialog id="eventoModal">
+      <menu>
+        <button id="cancelEventoModal" class="cancel" type="reset">
+          Cerrar
+        </button>
+      </menu>
+      <h1>Eventos</h1>
+
       <form method="dialog">
         <div class="innerModal">
-          <menu>
-            <button id="cancel" type="reset">Cancel</button>
-          </menu>
           <section id="modalData"></section>
         </div>
       </form>
     </dialog>
 
-    <iframe
-      name="hiddenFrame"
-      width="0"
-      height="0"
-      border="0"
-      style="display: none"
-    ></iframe>
-
     <dialog id="crearModal">
       <div class="crearModalInterior">
         <menu>
-          <button id="cancel" type="reset">Cancel</button>
+          <button id="crearCancel" class="cancel" type="reset">Cerrar</button>
         </menu>
-        <h1>crear unidad</h1>
+        <h1>Crear unidad</h1>
         <div class="modalData">
-          <div>
+          <div class="modalDataCreate">
             <input
               type="text"
               placeholder="Nombre de la unidad"
               name="id"
               required
-              class="jose"
+              class="createInput"
               id="nombreAgregarUnidad"
             />
             <input
@@ -64,10 +60,10 @@
             />
             <button
               id="submitAgregarUnidad"
-              class="jose"
+              class="createSubmit"
               onclick="agregarUnidad()"
             >
-              Me quiero morir
+              Crear Unidad
             </button>
           </div>
         </div>
@@ -99,6 +95,9 @@
         const unidadesContainer = document.querySelector(".unidades");
 
         try {
+          if (!name.value) {
+            throw new Error("El nombre de la unidad no puede estar vacío");
+          }
           await fetch("/api/unidad/Crear", {
             method: "POST",
             headers: {
@@ -113,6 +112,7 @@
             id: name.value,
           });
         } catch (error) {
+          throwError("El nombre de la unidad no puede estar vacío");
           console.log(error);
         }
       };
@@ -180,6 +180,7 @@
         const eventos = await fetchEventos(unidadId);
 
         modalData.innerHTML = "";
+
         for (const evento of eventos) {
           modalData.innerHTML += `
             <div class='evento'>
@@ -188,9 +189,16 @@
             </div>
           `;
         }
+
+        if (modalData.innerHTML.length < 20) {
+          modalData.innerHTML = `
+            <p>No hay eventos</p>
+          `;
+        }
+
         modal.showModal();
         console.log(unidadId);
-        const cancel = document.getElementById("cancel");
+        const cancel = document.getElementById("cancelEventoModal");
         cancel.addEventListener("click", () => {
           const modal = document.querySelector("#eventoModal");
           modal.close();
@@ -225,7 +233,7 @@
         const modalData = document.querySelector(".modalData");
 
         modal.showModal();
-        const cancel = document.getElementById("cancel");
+        const cancel = document.getElementById("crearCancel");
         cancel.addEventListener("click", () => {
           const modal = document.querySelector("#crearModal");
           modal.close();
@@ -234,10 +242,20 @@
 
       const unitItem = (unidad) => {
         const id = unidad.id;
+        const estado = unidad.estado;
+        const icono = estado
+          ? "bi bi-check-circle-fill"
+          : "bi bi-x-circle-fill";
+        const texto = estado == 1 ? "Recibiendo" : "Detenido";
         return `
             <div class='unidad'>
-                <h3  onclick="listEventos('${id}')">${capitalize(id)}</h3>
-                <button class='deleteButton' onclick="deleteUnit('${id}')"><i class="bi bi-trash"></i></button>
+                <h3 class="unitItemTitle" onclick="listEventos('${id}')">${capitalize(
+          id
+        )}</h3>
+                <div>
+                  <button class='toggleButton' onclick="deleteUnit('${id}')">${texto}</button>
+                  <button class='deleteButton' onclick="deleteUnit('${id}')"><i class="bi bi-trash"></i></button>
+                </div>
             </div>
             `;
       };
@@ -313,10 +331,20 @@
         margin-top: 1rem;
       }
 
-      .unidades button {
+      .unidades .deleteButton {
         padding: 1rem;
         color: #fff;
         background-color: #ef4444;
+        border: none;
+        border-radius: 8px;
+        font-size: 1.2rem;
+        cursor: pointer;
+      }
+
+      .unidades .toggleButton {
+        padding: 1rem;
+        color: #fff;
+        background-color: #020617;
         border: none;
         border-radius: 8px;
         font-size: 1.2rem;
@@ -340,8 +368,20 @@
         padding-right: 1rem;
       }
 
+      .cancel {
+        padding: 0.5rem 1rem;
+        color: #fff;
+        background-color: #ef4444;
+        border: none;
+        border-radius: 8px;
+        font-size: 1rem;
+        cursor: pointer;
+      }
+
       #eventoModal {
+        padding: 2rem;
         width: 90%;
+        height: 100vh;
         margin-left: auto;
         @media (min-width: 768px) {
           width: 30%;
@@ -381,6 +421,7 @@
         font-weight: 500;
         width: fit-content;
         font-size: 1rem !important;
+        cursor: pointer;
       }
 
       .jose {
@@ -393,11 +434,57 @@
         border: none;
         border-radius: 8px;
         padding: 1rem;
-        position: absolute;
+        position: fixed;
+        top: 20px;
+        left: 80%;
       }
 
       .errorModal p {
         color: #450a0a;
+      }
+
+      #crearModal {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        gap: 1rem;
+      }
+
+      .crearModalInterior {
+        padding: 2rem;
+        display: flex;
+        flex-direction: column;
+        gap: 2rem;
+      }
+
+      .crearModalInterior .createInput {
+        padding: 1rem;
+        border-radius: 8px;
+        border: 2px solid #020617;
+        display: flex;
+      }
+
+      .crearModalInterior .createSubmit {
+        padding: 1rem;
+        border-radius: 8px;
+        border: none;
+        width: 100%;
+        background-color: #020617;
+        color: #fff;
+        font-weight: 500;
+        font-size: 1rem;
+        cursor: pointer;
+      }
+
+      .modalDataCreate {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+      }
+
+      .unitItemTitle {
+        cursor: pointer;
       }
     </style>
   </body>
