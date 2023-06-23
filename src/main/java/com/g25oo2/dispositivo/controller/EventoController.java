@@ -2,6 +2,7 @@ package com.g25oo2.dispositivo.controller;
 
 import java.time.LocalDate;
 import java.util.Iterator;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -36,11 +37,13 @@ public class EventoController {
 
 	@PostMapping("/evento/Crear")
 	public void crearEvento(@RequestBody Evento body) {
+		System.out.println("entre al crear de evento");
 		eventoService.guardar(body);
 	}
 
 	@DeleteMapping("/evento/Eliminar")
 	public void borrarEvento(@RequestBody int body) {
+		System.out.println("entre al eliminar de evento");
 		try {
 			eventoService.eliminar(body);
 		} catch (Exception e) {
@@ -50,8 +53,8 @@ public class EventoController {
 	}
 
 	@GetMapping("/eventoXfechas")
-	public List<Evento> traerEventosXfechas(@RequestBody LocalDate fechaDesde, @RequestBody LocalDate fechaHasta) {
-		return null; // filtro que traiga evento por fechas
+	public List<Evento> traerEventosXfechas(@RequestBody LocalDateTime fecha) {
+		return null; // filtro que traiga evento de una fecha en especifico
 	}
 
 	@GetMapping("/eventosXunidad")
@@ -59,15 +62,24 @@ public class EventoController {
 		List<Evento> lstActivos = eventoService.traer().stream()
 				.filter(evento -> evento.getUnidad().getId().equals(nombreUnidad))
 				.collect(Collectors.toList());
-		
+
 		return lstActivos;
 	}
 
 	@GetMapping("/eventosXunidadEntreFechas")
-	public List<Evento> eventosXUnidadEntreFechas(@RequestBody String body,
-			@RequestBody LocalDate fechaDesde,
-			@RequestBody LocalDate fechaHasta) {
-		return null; // implementar filtro que traiga una lista de eventos por
+	public List<Evento> eventosXUnidadEntreFechas() {
+		LocalDateTime fechaDesde = LocalDateTime.of(2023, 06, 01, 10, 30, 00);
+		LocalDateTime fechaHasta = LocalDateTime.of(2023, 06, 05, 06, 45, 00);
+		List<Evento> lstActivos = eventoService.traer().stream()
+				.filter(evento -> evento.getFechaHora().isAfter(fechaDesde)
+						&& evento.getFechaHora().isBefore(fechaHasta))
+				.collect(Collectors.toList());
+
+		for (Evento evento2 : lstActivos) {
+			System.out.println(evento2.toString());
+		}
+
+		return lstActivos; // implementar filtro que traiga una lista de eventos por
 		// unidad, entre un rango
 		// de fechas.
 	}

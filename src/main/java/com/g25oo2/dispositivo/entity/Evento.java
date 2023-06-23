@@ -12,26 +12,27 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import lombok.Data;
+
 @Entity
-@Table(name="evento")
+@Table(name = "evento")
 public class Evento {
 
-	
 	@Id
-	@Column(name="ID_EVENTO")
+	@Column(name = "ID_EVENTO")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int idEvento;
-	
-	@Column(name="FECHA_HORA")
+
+	@Column(name = "FECHA_HORA")
 	private LocalDateTime fechaHora;
-	
-	@Column(name="DESCRIPCION")
+
+	@Column(name = "DESCRIPCION")
 	private String descripcion;
-	
-	@Column(name="ESTADO")
+
+	@Column(name = "ESTADO")
 	private int estado;
-	
-	@ManyToOne(fetch=FetchType.EAGER)
+
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "UNIDAD", referencedColumnName = "ID_UNIDAD")
 	private Unidad unidad;
 
@@ -75,6 +76,4 @@ public class Evento {
 		this.unidad = unidad;
 	}
 
-	
-	
 }

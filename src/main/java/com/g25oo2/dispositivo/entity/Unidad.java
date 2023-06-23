@@ -4,6 +4,8 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import lombok.Data;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -15,21 +17,21 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="unidad")
+@Table(name = "unidad")
 public class Unidad {
-	
+
 	@Id
-	@Column(name="ID_UNIDAD")
+	@Column(name = "ID_UNIDAD")
 	private String idUnidad;
-	
-	@Column(name="ESTADO")
+
+	@Column(name = "ESTADO")
 	private int estado;
 
-	@ManyToOne(fetch=FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "DISPOSITIVO", referencedColumnName = "ID_DISPOSITIVO", columnDefinition = "int")
 	private Dispositivo dispositivo;
-	
-	@OneToMany(mappedBy ="unidad", cascade = CascadeType.ALL)
+
+	@OneToMany(mappedBy = "unidad", cascade = CascadeType.ALL)
 	private List<Evento> eventos;
 
 	public String getId() {
@@ -55,5 +57,5 @@ public class Unidad {
 	public void setDispositivo(Dispositivo dispositivo) {
 		this.dispositivo = dispositivo;
 	}
-	
+
 }

@@ -20,34 +20,37 @@ import org.springframework.web.cors.CorsConfiguration;
 @Configuration
 public class SecurityConfig {
 
-    @Bean
-    public UserDetailsService users() {
-        User.UserBuilder users = User.withDefaultPasswordEncoder();
-        UserDetails user = users
-                .username("user")
-                .password("user123")
-                .roles("USER")
-                .build();
-        UserDetails admin = users
-                .username("admin")
-                .password("admin123")
-                .roles("USER", "ADMIN")
-                .build();
-        return new InMemoryUserDetailsManager(user, admin);
-    }
+        @Bean
+        public UserDetailsService users() {
+                User.UserBuilder users = User.withDefaultPasswordEncoder();
+                UserDetails user = users
+                                .username("user")
+                                .password("user123")
+                                .roles("USER")
+                                .build();
+                UserDetails admin = users
+                                .username("admin")
+                                .password("admin123")
+                                .roles("USER", "ADMIN")
+                                .build();
+                return new InMemoryUserDetailsManager(user, admin);
+        }
 
-    @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.csrf().disable()
-                .authorizeRequests()
-                .antMatchers("/").hasRole("USER")
-                .antMatchers("/api/dispositivos", "/api/evento", "/api/unidadesDeDispositivo", "/api/unidad/Eliminar", "/api/eventosXunidad")
-                .hasRole("ADMIN")
-                .anyRequest()
-                .authenticated()
-                .and()
-                .formLogin();
-        return http.build();
-    }
+        @Bean
+        public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+                http.csrf().disable()
+                                .authorizeRequests()
+                                .antMatchers("/", "/api/dispositivos", "/api/evento", "/api/unidadesDeDispositivo",
+                                                "/api/eventosXunidadEntreFechas")
+                                .hasAnyRole("USER", "ADMIN")
+                                .antMatchers("/api/unidad/Eliminar",
+                                                "api/unidad/Crear", "api/evento/Crear", "api/evento/Eliminar")
+                                .hasRole("ADMIN")
+                                .anyRequest()
+                                .authenticated()
+                                .and()
+                                .formLogin();
+                return http.build();
+        }
 
 }

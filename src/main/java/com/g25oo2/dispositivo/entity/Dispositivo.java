@@ -1,6 +1,5 @@
 package com.g25oo2.dispositivo.entity;
 
-
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -12,26 +11,26 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import lombok.Data;
+
 @Entity
-@Table(name="dispositivo")
+@Table(name = "dispositivo")
 public class Dispositivo {
 
-	
 	@Id
-	@Column(name="ID_DISPOSITIVO")
+	@Column(name = "ID_DISPOSITIVO")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int idDispositivo;
-	
-	@Column(name="NOMBRE")
+
+	@Column(name = "NOMBRE")
 	private String nombre;
-	
-	@Column(name="ESTADO")
+
+	@Column(name = "ESTADO")
 	private int estado;
 
-	@OneToMany(mappedBy ="dispositivo", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "dispositivo", cascade = CascadeType.ALL)
 	private List<Unidad> unidades;
-	
-	
+
 	public int getId() {
 		return idDispositivo;
 	}
@@ -56,10 +55,4 @@ public class Dispositivo {
 		this.estado = estado;
 	}
 
-	@Override
-	public String toString() {
-		return "Dispositivo [idDispositivo=" + idDispositivo + ", nombre=" + nombre + ", estado=" + estado
-				+ ", unidades=" + unidades + "]";
-	}
-		
 }

@@ -42,6 +42,7 @@ public class UnidadController {
 
 	@PostMapping("/unidad/Crear")
 	public void crearUnidad(@RequestBody UtilCreateObject body) {
+		System.out.println("entre ");
 		try {
 			unidadService.guardar(body);
 		} catch (Exception e) {
@@ -51,6 +52,7 @@ public class UnidadController {
 
 	@PostMapping("/unidad/Eliminar")
 	public void borrarUnidad(@RequestBody Unidad body) {
+		System.out.println("entre al eliminar de unidad");
 		try {
 			unidadService.eliminar(body.getId());
 		} catch (Exception e) {
