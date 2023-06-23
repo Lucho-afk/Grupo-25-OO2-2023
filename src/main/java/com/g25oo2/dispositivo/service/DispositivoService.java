@@ -15,6 +15,6 @@ public interface DispositivoService {
 	
 	public void modificar(Dispositivo dispositivo, int id)throws Exception;
 	
-	
+	public Dispositivo traer(int id) throws Exception;
 
 }

@@ -8,13 +8,19 @@ import org.springframework.stereotype.Service;
 
 import com.g25oo2.dispositivo.entity.Dispositivo;
 import com.g25oo2.dispositivo.entity.Unidad;
+import com.g25oo2.dispositivo.repository.DispositivoDao;
 import com.g25oo2.dispositivo.repository.UnidadDao;
+import com.g25oo2.dispositivo.service.DispositivoService;
 import com.g25oo2.dispositivo.service.UnidadService;
+import com.g25oo2.dispositivo.util.UtilCreateObject;
 
 @Service
 public class UnidadImpl implements UnidadService {
 	@Autowired
 	UnidadDao daoUnidad;
+	
+	@Autowired
+	DispositivoService dispositivoService;
 	
 	public List<Unidad> traer() {
 		List<Unidad> lstDispositivos = daoUnidad.findAll();
@@ -25,13 +31,13 @@ public class UnidadImpl implements UnidadService {
 	}
 
 	@Override
-	public void guardar(Unidad unidad) throws Exception  {
-		Optional<Unidad> aux = daoUnidad.findById(unidad.getId());
+	public void guardar(UtilCreateObject body) throws Exception  {
+		Optional<Unidad> aux = daoUnidad.findById(body.getNombreUnidad());
 		if (aux.isPresent()) {
 			throw new Exception("Esta unidad ya existe");
 		} else {
+			Unidad unidad = new Unidad(body.getNombreUnidad(),1,dispositivoService.traer(body.getIdDispositivo()));
 			daoUnidad.save(unidad);
-
 		}
 	}
 

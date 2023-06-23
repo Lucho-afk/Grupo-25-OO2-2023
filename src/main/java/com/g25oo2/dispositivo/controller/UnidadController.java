@@ -20,6 +20,7 @@ import com.g25oo2.dispositivo.entity.Dispositivo;
 import com.g25oo2.dispositivo.entity.Unidad;
 import com.g25oo2.dispositivo.service.DispositivoService;
 import com.g25oo2.dispositivo.service.UnidadService;
+import com.g25oo2.dispositivo.util.UtilCreateObject;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -40,9 +41,7 @@ public class UnidadController {
 	}
 
 	@PostMapping("/unidad/Crear")
-	public void crearUnidad(@RequestBody Unidad body) {
-		System.out.println("body");
-		System.out.println(body);
+	public void crearUnidad(@RequestBody UtilCreateObject body) {
 		try {
 			unidadService.guardar(body);
 		} catch (Exception e) {
