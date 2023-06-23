@@ -4,7 +4,9 @@ import java.util.Arrays;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -12,36 +14,40 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
+import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.cors.CorsConfiguration;
 
 @Configuration
-@EnableWebSecurity
-public class SecurityConfig extends WebSecurityConfigurerAdapter {
+public class SecurityConfig {
 
-    @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.inMemoryAuthentication()// con esto agregamos usarios en memoria,
-                // agregando sus credenciales
-                .withUser("admin")// asignamos el usario
-                .password("{noop}123")// contraseña
-                .roles("ADMIN")// y roles
-                .and()// clasula para agregar otro usuario
-                .withUser("user")
-                .password("{noop}123")
-                .roles("USER");
+    @Bean
+    public UserDetailsService users() {
+        User.UserBuilder users = User.withDefaultPasswordEncoder();
+        UserDetails user = users
+                .username("user")
+                .password("user123")
+                .roles("USER")
+                .build();
+        UserDetails admin = users
+                .username("admin")
+                .password("admin123")
+                .roles("USER", "ADMIN")
+                .build();
+        return new InMemoryUserDetailsManager(user, admin);
     }
 
-    @Override
-    protected void configure(HttpSecurity http) throws Exception {
-        http.authorizeRequests()
-                .antMatchers("api/evento/Crear", "api/evento/Eliminar",
-                        "api/unidad/Crear", "api/unidad/Eliminar")
+    @Bean
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        http.csrf().disable()
+                .authorizeRequests()
+                .antMatchers("/").hasRole("USER")
+                .antMatchers("/api/dispositivos", "/api/evento", "/api/unidadesDeDispositivo", "/api/unidad/Eliminar")
                 .hasRole("ADMIN")
-                .antMatchers("/", "/api/dispositivos", "api/evento", "/api/unidadesDeDispositivo")
-                .hasAnyRole("USER", "ADMIN")
+                .anyRequest()
+                .authenticated()
                 .and()
-                .formLogin()
-                .and()
-                .exceptionHandling();
+                .formLogin();
+        return http.build();
     }
+
 }
