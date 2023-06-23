@@ -18,7 +18,7 @@ public class ControladorExceptions {
 	public String controlada(String mensaje) {
 		return mensaje;
 	}
-	
+
 	@GetMapping("/error")
 	public ModelAndView traerDispositivos(Model model) {
 		return new ModelAndView("redirect:/error");

@@ -60,8 +60,7 @@ public class EventoController {
 	@GetMapping("/eventosXunidad")
 	public List<Evento> eventosXUnidad(@RequestParam String nombreUnidad) {
 		List<Evento> lstActivos = eventoService.traer().stream()
-				.filter(evento -> evento.getUnidad().getId().equals(nombreUnidad))
-				.collect(Collectors.toList());
+				.filter(evento -> evento.getUnidad().getId().equals(nombreUnidad)).collect(Collectors.toList());
 
 		return lstActivos;
 	}
@@ -70,9 +69,8 @@ public class EventoController {
 	public List<Evento> eventosXUnidadEntreFechas() {
 		LocalDateTime fechaDesde = LocalDateTime.of(2023, 06, 01, 10, 30, 00);
 		LocalDateTime fechaHasta = LocalDateTime.of(2023, 06, 05, 06, 45, 00);
-		List<Evento> lstActivos = eventoService.traer().stream()
-				.filter(evento -> evento.getFechaHora().isAfter(fechaDesde)
-						&& evento.getFechaHora().isBefore(fechaHasta))
+		List<Evento> lstActivos = eventoService.traer().stream().filter(
+				evento -> evento.getFechaHora().isAfter(fechaDesde) && evento.getFechaHora().isBefore(fechaHasta))
 				.collect(Collectors.toList());
 
 		for (Evento evento2 : lstActivos) {

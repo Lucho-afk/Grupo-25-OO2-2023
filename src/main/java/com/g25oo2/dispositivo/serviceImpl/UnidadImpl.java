@@ -24,8 +24,7 @@ public class UnidadImpl implements UnidadService {
 
 	public List<Unidad> traer() {
 		List<Unidad> lstDispositivos = daoUnidad.findAll();
-		List<Unidad> lstActivos = lstDispositivos.stream()
-				.filter(disp -> disp.getEstado() != 0)
+		List<Unidad> lstActivos = lstDispositivos.stream().filter(disp -> disp.getEstado() != 0)
 				.collect(Collectors.toList());
 		return lstActivos;
 	}
@@ -73,16 +72,16 @@ public class UnidadImpl implements UnidadService {
 		}
 
 	}
-	
-    public Unidad traer(String idUnidad) throws Exception {
-        Optional<Unidad> aux = daoUnidad.findById(idUnidad);
-        Unidad unidad= new Unidad();
-        if(aux.isPresent()) {
-            unidad = aux.get();
-        }else {
-            throw new Exception("la unidad no existe");
-        }
-        return unidad;
-    }
+
+	public Unidad traer(String idUnidad) throws Exception {
+		Optional<Unidad> aux = daoUnidad.findById(idUnidad);
+		Unidad unidad = new Unidad();
+		if (aux.isPresent()) {
+			unidad = aux.get();
+		} else {
+			throw new Exception("la unidad no existe");
+		}
+		return unidad;
+	}
 
 }
