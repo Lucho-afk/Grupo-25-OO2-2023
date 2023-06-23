@@ -73,5 +73,16 @@ public class UnidadImpl implements UnidadService {
 		}
 
 	}
+	
+    public Unidad traer(String idUnidad) throws Exception {
+        Optional<Unidad> aux = daoUnidad.findById(idUnidad);
+        Unidad unidad= new Unidad();
+        if(aux.isPresent()) {
+            unidad = aux.get();
+        }else {
+            throw new Exception("la unidad no existe");
+        }
+        return unidad;
+    }
 
 }

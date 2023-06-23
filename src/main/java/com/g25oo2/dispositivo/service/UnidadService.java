@@ -15,4 +15,5 @@ public interface UnidadService {
 
 	public void guardar(UtilCreateObject body) throws Exception;
 
+	public Unidad traer(String idUnidad) throws Exception;
 }
