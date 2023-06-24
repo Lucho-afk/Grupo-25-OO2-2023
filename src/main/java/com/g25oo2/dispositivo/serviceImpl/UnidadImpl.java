@@ -32,13 +32,15 @@ public class UnidadImpl implements UnidadService {
 	@Override
 	public void guardar(UtilCreateObject body) throws Exception {
 		Optional<Unidad> aux = daoUnidad.findById(body.getNombreUnidad());
+		Unidad unidad = new Unidad();
 		if (aux.isPresent()) {
-			throw new Exception("Esta unidad ya existe");
+			if (aux.get().getEstado() == 0) {
+				unidad.setEstado(1);
+				daoUnidad.save(unidad);
+			} else {
+				throw new Exception("Esta unidad ya existe");
+			}
 		} else {
-			Unidad unidad = new Unidad();
-
-			// body.getNombreUnidad(),1,dispositivoService.traer(body.getIdDispositivo())
-
 			unidad.setDispositivo(dispositivoService.traer(body.getIdDispositivo()));
 			unidad.setEstado(1);
 			unidad.setId(body.getNombreUnidad());
