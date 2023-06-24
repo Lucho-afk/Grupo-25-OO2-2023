@@ -15,5 +15,7 @@ public interface EventoService {
 	public void modificar(Evento evento, int id) throws Exception;
 
 	public void generarEvento(String idUnidad) throws Exception;
+	
+	public List<Evento> traerPorUnidad(String unidadNombre) throws Exception;
 
 }

@@ -68,18 +68,19 @@ public class EventoImpl implements EventoService {
 		List<Evento> eventos = this.traer();
 		Evento aux = eventos.get(eventos.size() - 1);
 		evento.setEstado((aux.getEstado() == 0) ? 1 : 0);
-		switch (aux.getUnidad().getDispositivo().getId()) {
-		case 1:
-			evento.setDescripcion((evento.getEstado() == 1) ? "se ocupa lugar" : "se libera lugar");
-			break;
-
-		default:
-			evento.setDescripcion((evento.getEstado() == 1) ? "encendido" : "apagado");
-			break;
-		}
+		
+		evento.setDescripcion((evento.getEstado() == 1) ? "encendido" : "apagado");
+		
 		evento.setFechaHora(LocalDateTime.now());
 		evento.setUnidad(unidadService.traer(idUnidad));
 		daoEvento.save(evento);
 	}
+	
+	public List<Evento> traerPorUnidad(String nombreUnidad) throws Exception {
+		List<Evento> eventos = this.traer();
+		List<Evento> lstActivos = eventos.stream()
+				.filter(evento -> evento.getUnidad().getId().equals(nombreUnidad)).collect(Collectors.toList());
 
+		return lstActivos;
+	}
 }

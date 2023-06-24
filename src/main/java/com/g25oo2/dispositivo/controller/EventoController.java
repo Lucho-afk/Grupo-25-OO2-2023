@@ -3,6 +3,7 @@ package com.g25oo2.dispositivo.controller;
 import java.time.LocalDate;
 import java.util.Iterator;
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -59,10 +60,13 @@ public class EventoController {
 
 	@GetMapping("/eventosXunidad")
 	public List<Evento> eventosXUnidad(@RequestParam String nombreUnidad) {
-		List<Evento> lstActivos = eventoService.traer().stream()
-				.filter(evento -> evento.getUnidad().getId().equals(nombreUnidad)).collect(Collectors.toList());
-
-		return lstActivos;
+		List<Evento> eventos = Collections.emptyList(); 
+		try {
+			eventos = eventoService.traerPorUnidad(nombreUnidad);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return eventos;
 	}
 	
 	@PostMapping("/generarEvento")
