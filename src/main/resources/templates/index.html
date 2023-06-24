@@ -16,9 +16,9 @@
     <title>Dispositivos</title>
   </head>
   <body class="container">
-    <h1 class="title" style="margin: 1rem 0rem;">Dispositivos</h3>
+    <h1 class="title" style="margin: 1rem 0rem">Dispositivos</h1>
     <div action="" id="dispositivos"></div>
-    <h1 class="title" style="margin-top: 2rem;">Unidades</h3>
+    <h1 class="title" style="margin-top: 2rem">Unidades</h1>
     <div class="unidades"></div>
 
     <dialog id="eventoModal">
@@ -84,7 +84,7 @@
           },
           body: JSON.stringify(99999),
         });
-        
+
         const data = await response.json();
 
         if (data?.length) {
@@ -102,7 +102,7 @@
         if (data.status !== 200) {
           return false;
         }
-      }
+      };
 
       const fetchDispositivos = async () => {
         try {
@@ -128,7 +128,6 @@
           await fetch(`/api/generarEvento?idUnidad=${idUnidad}`, {
             method: "POST",
           });
-
         } catch (error) {
           throwError(error);
         }
@@ -169,14 +168,12 @@
             throw new Error(data.message);
           }
 
-
           unidadesContainer.innerHTML += unitItem({
             id: name.value,
           });
         } catch (error) {
           throwError(error);
         }
-
       };
 
       const fetchUnidades = async (idDispositivo) => {
@@ -185,7 +182,6 @@
             `/api/unidadesDeDispositivo?dispositivo=${idDispositivo}`
           );
           const data = await response.json();
-
 
           if (data.length) {
             return data;
@@ -199,17 +195,14 @@
         } catch (error) {
           throwError(error);
         }
-      }
-    
-    
+      };
 
       const fetchEventos = async (unidadId) => {
         try {
           const response = await fetch(
-          `api/eventosXunidad?nombreUnidad=${unidadId}`
-        );
+            `api/eventosXunidad?nombreUnidad=${unidadId}`
+          );
           const data = await response.json();
-
 
           if (Array.isArray(data)) {
             return data;
@@ -232,29 +225,25 @@
 
         const unidadHTML = document.getElementById(`unidad-${unitId}`);
 
-        
         try {
-           const response = await fetch(`/api/unidad/Eliminar`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(unidad),
-        });
-        
-        const data = await response.json();
+          const response = await fetch(`/api/unidad/Eliminar`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(unidad),
+          });
 
-        if (data.status !== 200) {
-          throw new Error(data.message);
-        }
-        unidadHTML.remove();
-        return data;
-          
+          const data = await response.json();
+
+          if (data.status !== 200) {
+            throw new Error(data.message);
+          }
+          unidadHTML.remove();
+          return data;
         } catch (error) {
           throwError(error);
         }
-
-       
       };
 
       const capitalize = (str = "") => {
@@ -379,12 +368,10 @@
             ${deviceItem(dispositivo)}
             `;
         }
-
-        
       };
 
       listOfDevices();
-      
+
       const hideSpecialFields = async () => {
         const fields = document.querySelectorAll(".adminOnly");
         const isAdminUser = await isAdmin();
@@ -394,8 +381,7 @@
             field.remove();
           }
         }
-      }
-
+      };
     </script>
 
     <style>
