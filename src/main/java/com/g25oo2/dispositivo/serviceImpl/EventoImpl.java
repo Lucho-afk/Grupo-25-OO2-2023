@@ -31,7 +31,6 @@ public class EventoImpl implements EventoService {
 	@Override
 	public void guardar(Evento evento) {
 		daoEvento.save(evento);
-
 	}
 
 	public void eliminar(int id) throws Exception {
@@ -59,7 +58,6 @@ public class EventoImpl implements EventoService {
 		} else {
 			throw new Exception("el evento que se quiere modificar no existe en la base de datos");
 		}
-
 	}
 
 	@Override
@@ -69,8 +67,10 @@ public class EventoImpl implements EventoService {
 		Evento aux = eventos.get(eventos.size() - 1);
 		evento.setEstado((aux.getEstado() == 0) ? 1 : 0);
 		
-		evento.setDescripcion((evento.getEstado() == 1) ? "encendido" : "apagado");
+		evento.setDescripcion((evento.getEstado() == 0) ? "encendido" : "apagado");
 		
+		
+
 		evento.setFechaHora(LocalDateTime.now());
 		evento.setUnidad(unidadService.traer(idUnidad));
 		daoEvento.save(evento);

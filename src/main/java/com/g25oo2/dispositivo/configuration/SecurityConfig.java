@@ -40,8 +40,7 @@ public class SecurityConfig {
         public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
                 http.csrf().disable()
                                 .authorizeRequests()
-                                .antMatchers("/", "/api/dispositivos", "/api/evento", "/api/unidadesDeDispositivo",
-                                                "/api/eventosXunidadEntreFechas")
+                                .antMatchers("/", "/api/dispositivos", "/api/evento", "/api/unidadesDeDispositivo")
                                 .hasAnyRole("USER", "ADMIN")
                                 .antMatchers("/api/unidad/Eliminar",
                                                 "api/unidad/Crear", "api/evento/Crear", "api/evento/Eliminar")

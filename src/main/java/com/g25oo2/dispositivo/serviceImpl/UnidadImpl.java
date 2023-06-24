@@ -38,7 +38,6 @@ public class UnidadImpl implements UnidadService {
 				unidad.setEstado(1);
 				unidad.setId(aux.get().getId());
 				unidad.setDispositivo(aux.get().getDispositivo());
-//				unidad.setEventos(aux.get().getEventos()); quitar este comentario mata la lista de unidades en el front
 				System.out.println(aux.get().toString());
 				daoUnidad.save(unidad);
 			} else {
