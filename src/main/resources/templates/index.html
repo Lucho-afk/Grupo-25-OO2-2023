@@ -77,18 +77,46 @@
 
     <script th:inline="javascript">
       const fetchDispositivos = async () => {
-        const response = await fetch("/api/dispositivos");
-        const data = await response.json();
-        return data;
+        try {
+          const response = await fetch("/api/dispositivos");
+          const data = await response.json();
+
+          if (data?.length) {
+            return data;
+          }
+
+          if (data.status !== 200) {
+            throw new Error(data.message);
+          }
+
+          return data;
+        } catch (error) {
+          throwError(error);
+        }
       };
 
       const generarEvento = async (idUnidad) => {
-        await fetch(`/api/generarEvento?idUnidad=${idUnidad}`, {
+        try {
+          const request = await fetch(`/api/generarEvento?idUnidad=${idUnidad}`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
         });
+        const response = await request.json();
+
+        if (data?.length) {
+            return data;
+        }
+
+        if (response.status !== 200) {
+          throw new Error(response.message);
+        }
+
+        return response;
+        } catch (error) {
+          throwError(error);
+        }
       };
 
       const throwError = (error) => {
@@ -103,11 +131,13 @@
         console.log("agregarUnidad", name.value, dispositivo.value);
         const unidadesContainer = document.querySelector(".unidades");
 
+        console.log("name", name.value);
+
         try {
-          if (!name.value) {
+          if (name.value == "") {
             throw new Error("El nombre de la unidad no puede estar vacío");
           }
-          const rsp = await fetch("/api/unidad/Crear", {
+          const request = await fetch("/api/unidad/Crear", {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
@@ -117,33 +147,64 @@
               idDispositivo: dispositivo.value,
             }),
           });
+          const data = await request.json();
+
+          if (data?.length) {
+            return data;
+          }
+
+          if (data.status !== 200) {
+            throw new Error(data.message);
+          }
+
+
           unidadesContainer.innerHTML += unitItem({
             id: name.value,
           });
-          console.log(await rsp.json());
         } catch (error) {
-          throwError("El nombre de la unidad no puede estar vacío");
-          console.log(error);
+          throwError(error);
         }
 
       };
 
       const fetchUnidades = async (idDispositivo) => {
-        const response = await fetch(
-          `/api/unidadesDeDispositivo?dispositivo=${idDispositivo}`
-        ); // implementar filtros
-        const data = await response.json();
-        return data;
-      };
+        try {
+          const response = await fetch(
+            `/api/unidadesDeDispositivo?dispositivo=${idDispositivo}`
+          );
+          const data = await response.json();
+
+          if (data.length) {
+            return data;
+          }
+
+          if (data.status !== 200) {
+            throw new Error(data.message);
+          }
+
+          return data;
+        } catch (error) {
+          throwError(error);
+        }
+      }
+    
+    
 
       const fetchEventos = async (unidadId) => {
-        const response = await fetch(
+        try {
+          const response = await fetch(
           `api/eventosXunidad?nombreUnidad=${unidadId}`
         );
-        console.log({ response });
-        const data = await response.json();
-        console.log({ data });
-        return data;
+          const data = await response.json();
+
+          if (data.status !== 200) {
+            throw new Error(data.message);
+          }
+
+          return data;
+        } catch (error) {
+          throwError(error);
+        }
       };
 
       const deleteUnit = async (unitId) => {
@@ -162,10 +223,12 @@
           },
           body: JSON.stringify(unidad),
         });
-        if (response.status !== 200) {
-          throw new Error("No se pudo eliminar la unidad");
-        }
+        
         const data = await response.json();
+
+        if (data.status !== 200) {
+          throw new Error(data.message);
+        }
         return data;
         console.log(data);
           unidadHTML.remove();
