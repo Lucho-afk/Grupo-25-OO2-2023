@@ -151,17 +151,27 @@
 
         const unidadHTML = document.getElementById(`unidad-${unitId}`);
 
-        unidadHTML.remove();
-
-        const response = await fetch(`/api/unidad/Eliminar`, {
+        
+        try {
+           const response = await fetch(`/api/unidad/Eliminar`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
           body: JSON.stringify(unidad),
         });
+        if (response.status !== 200) {
+          throw new Error("No se pudo eliminar la unidad");
+        }
         const data = await response.json();
         return data;
+        console.log(data);
+          unidadHTML.remove();
+        } catch (error) {
+          throwError(error);
+        }
+
+       
       };
 
       const capitalize = (str = "") => {
