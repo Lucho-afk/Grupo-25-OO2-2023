@@ -82,6 +82,15 @@
         return data;
       };
 
+      const generarEvento = async (idUnidad) => {
+        await fetch(`/api/generarEvento?idUnidad=${idUnidad}`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+      };
+
       const throwError = (error) => {
         document.getElementById("mensajeDeErrorParaModal").innerText = error;
         document.querySelector(".errorModal").showModal();
@@ -139,7 +148,11 @@
         let unidad = {
           id: "" + unitId,
         };
-        console.log("deleteButton", unitId);
+
+        const unidadHTML = document.getElementById(`unidad-${unitId}`);
+
+        unidadHTML.remove();
+
         const response = await fetch(`/api/unidad/Eliminar`, {
           method: "POST",
           headers: {
@@ -243,17 +256,14 @@
       const unitItem = (unidad) => {
         const id = unidad.id;
         const estado = unidad.estado;
-        const icono = estado
-          ? "bi bi-check-circle-fill"
-          : "bi bi-x-circle-fill";
-        const texto = estado == 1 ? "Recibiendo" : "Detenido";
+
         return `
-            <div class='unidad'>
+            <div class='unidad' id='unidad-${id}'>
                 <h3 class="unitItemTitle" onclick="listEventos('${id}')">${capitalize(
           id
         )}</h3>
                 <div>
-                  <button class='toggleButton' onclick="deleteUnit('${id}')">${texto}</button>
+                  <button class='toggleButton' onclick="generarEvento('${id}')">Generar evento</button>
                   <button class='deleteButton' onclick="deleteUnit('${id}')"><i class="bi bi-trash"></i></button>
                 </div>
             </div>

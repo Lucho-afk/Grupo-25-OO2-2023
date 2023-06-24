@@ -64,6 +64,15 @@ public class EventoController {
 
 		return lstActivos;
 	}
+	
+	@PostMapping("/generarEvento")
+	public void generarEvento(@RequestParam String idUnidad) {
+		try {
+			eventoService.generarEvento(idUnidad);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 
 	@GetMapping("/eventosXunidadEntreFechas")
 	public List<Evento> eventosXUnidadEntreFechas() {

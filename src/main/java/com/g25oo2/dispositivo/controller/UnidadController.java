@@ -67,5 +67,7 @@ public class UnidadController {
 				.collect(Collectors.toList());
 		return lstActivos; // desarrollar filtro de unidades por id de dispositivo.
 	}
+	
+	
 
 }
