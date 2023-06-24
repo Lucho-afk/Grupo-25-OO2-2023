@@ -76,10 +76,40 @@
     </dialog>
 
     <script th:inline="javascript">
+      const isAdmin = async () => {
+        const response = await fetch(`/api/unidad/Eliminar`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(99999),
+        });
+        
+        const data = await response.json();
+
+        if (data?.length) {
+          return true;
+        }
+
+        if (data.status === 403) {
+          return false;
+        }
+
+        if (data.status === 400) {
+          return true;
+        }
+
+        if (data.status !== 200) {
+          return false;
+        }
+      }
+
       const fetchDispositivos = async () => {
         try {
           const response = await fetch("/api/dispositivos");
           const data = await response.json();
+
+          console.log("jose", data);
 
           if (data?.length) {
             return data;
@@ -97,23 +127,10 @@
 
       const generarEvento = async (idUnidad) => {
         try {
-          const request = await fetch(`/api/generarEvento?idUnidad=${idUnidad}`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
-        const response = await request.json();
+          await fetch(`/api/generarEvento?idUnidad=${idUnidad}`, {
+            method: "POST",
+          });
 
-        if (data?.length) {
-            return data;
-        }
-
-        if (response.status !== 200) {
-          throw new Error(response.message);
-        }
-
-        return response;
         } catch (error) {
           throwError(error);
         }
@@ -174,6 +191,8 @@
           );
           const data = await response.json();
 
+          console.log("fetchUnidades", data);
+
           if (data.length) {
             return data;
           }
@@ -196,6 +215,12 @@
           `api/eventosXunidad?nombreUnidad=${unidadId}`
         );
           const data = await response.json();
+
+          console.log("eventos", data);
+
+          if (Array.isArray(data)) {
+            return data;
+          }
 
           if (data.status !== 200) {
             throw new Error(data.message);
@@ -229,9 +254,9 @@
         if (data.status !== 200) {
           throw new Error(data.message);
         }
+        unidadHTML.remove();
         return data;
-        console.log(data);
-          unidadHTML.remove();
+          
         } catch (error) {
           throwError(error);
         }
@@ -295,6 +320,9 @@
 
       const listUnidades = async (idDispositivo) => {
         const unidades = await fetchUnidades(idDispositivo);
+
+        console.log("unidades", unidades);
+
         const idDispositivoInput = document.querySelector(
           "#idDispositivoInput"
         );
@@ -308,12 +336,13 @@
         const unidadesContainer = document.querySelector(".unidades");
         unidadesContainer.innerHTML = `
           <div class='unidades'>
-            <button class="add clickable" onclick='createUnidad()'>Agregar Unidad</button>
+            <button class="add clickable adminOnly" onclick='createUnidad()'>Agregar Unidad</button>
           </div>`;
         for (const unidad of unidades) {
           console.log(unidad);
           unidadesContainer.innerHTML += unitItem(unidad);
         }
+        await hideSpecialFields();
       };
 
       const createUnidad = async () => {
@@ -338,8 +367,8 @@
           id
         )}</h3>
                 <div>
-                  <button class='toggleButton clickable' onclick="generarEvento('${id}')">Generar evento</button>
-                  <button class='deleteButton clickable' onclick="deleteUnit('${id}')"><i class="bi bi-trash"></i></button>
+                  <button class='toggleButton clickable adminOnly' onclick="generarEvento('${id}')">Generar evento</button>
+                  <button class='deleteButton clickable adminOnly' onclick="deleteUnit('${id}')"><i class="bi bi-trash"></i></button>
                 </div>
             </div>
             `;
@@ -356,6 +385,9 @@
         const form = document.getElementById("dispositivos");
         const dispositivos = await fetchDispositivos();
 
+
+        console.log("pepe", dispositivos);
+
         for (dispositivo of dispositivos) {
           const id = dispositivo.id;
           form.innerHTML += `
@@ -363,9 +395,23 @@
             ${deviceItem(dispositivo)}
             `;
         }
+
+        
       };
 
       listOfDevices();
+      
+      const hideSpecialFields = async () => {
+        const fields = document.querySelectorAll(".adminOnly");
+        const isAdminUser = await isAdmin();
+
+        for (const field of fields) {
+          if (!isAdminUser) {
+            field.remove();
+          }
+        }
+      }
+
     </script>
 
     <style>

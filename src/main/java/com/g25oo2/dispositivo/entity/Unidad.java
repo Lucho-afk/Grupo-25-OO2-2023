@@ -37,6 +37,20 @@ public class Unidad {
 	public String getId() {
 		return idUnidad;
 	}
+	
+	
+// quitar este comentario mata la lista de unidades en el front
+//	public List<Evento> getEventos() {
+//		return eventos;
+//	}
+//
+//
+//
+//	public void setEventos(List<Evento> eventos) {
+//		this.eventos = eventos;
+//	}
+
+
 
 	public void setId(String id) {
 		this.idUnidad = id;
@@ -57,5 +71,13 @@ public class Unidad {
 	public void setDispositivo(Dispositivo dispositivo) {
 		this.dispositivo = dispositivo;
 	}
+
+	@Override
+	public String toString() {
+		return "Unidad [idUnidad=" + idUnidad + ", estado=" + estado + ", dispositivo=" + dispositivo + ", eventos="
+				+ eventos + "]";
+	}
+	
+	
 
 }
