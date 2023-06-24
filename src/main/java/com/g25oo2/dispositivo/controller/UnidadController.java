@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 import javax.annotation.security.RolesAllowed;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,6 +21,7 @@ import com.g25oo2.dispositivo.entity.Dispositivo;
 import com.g25oo2.dispositivo.entity.Unidad;
 import com.g25oo2.dispositivo.service.DispositivoService;
 import com.g25oo2.dispositivo.service.UnidadService;
+import com.g25oo2.dispositivo.util.RespuestaStatus;
 import com.g25oo2.dispositivo.util.UtilCreateObject;
 
 import lombok.extern.slf4j.Slf4j;
@@ -36,28 +38,37 @@ public class UnidadController {
 	@GetMapping("/unidad")
 	public List<Unidad> traerUnidades() {
 		List<Unidad> aux = unidadService.traer();
-
 		return aux;
 	}
 
 	@PostMapping("/unidad/Crear")
-	public void crearUnidad(@RequestBody UtilCreateObject body) {
-		System.out.println("entre ");
+	public RespuestaStatus crearUnidad(@RequestBody UtilCreateObject body) {
+		RespuestaStatus repuesta = new RespuestaStatus();
 		try {
 			unidadService.guardar(body);
+			repuesta.setMessage("OK");
+			repuesta.setStatus(200);
 		} catch (Exception e) {
 			e.printStackTrace();
+			repuesta.setMessage(e.getMessage());
+			repuesta.setStatus(400);
 		}
+		return repuesta;
 	}
 
 	@PostMapping("/unidad/Eliminar")
-	public void borrarUnidad(@RequestBody Unidad body) {
-		System.out.println("entre al eliminar de unidad");
+	public RespuestaStatus borrarUnidad(@RequestBody Unidad body) {
+		RespuestaStatus repuesta = new RespuestaStatus();
 		try {
 			unidadService.eliminar(body.getId());
+			repuesta.setMessage("OK");
+			repuesta.setStatus(200);
 		} catch (Exception e) {
 			e.printStackTrace();
+			repuesta.setMessage(e.getMessage());
+			repuesta.setStatus(400);
 		}
+		return repuesta;
 	}
 
 	@GetMapping("/unidadesDeDispositivo")
