@@ -109,8 +109,6 @@
           const response = await fetch("/api/dispositivos");
           const data = await response.json();
 
-          console.log("jose", data);
-
           if (data?.length) {
             return data;
           }
@@ -145,10 +143,7 @@
         const name = document.querySelector("#nombreAgregarUnidad");
         const dispositivo = document.querySelector("#idDispositivoInput");
 
-        console.log("agregarUnidad", name.value, dispositivo.value);
         const unidadesContainer = document.querySelector(".unidades");
-
-        console.log("name", name.value);
 
         try {
           if (name.value == "") {
@@ -191,7 +186,6 @@
           );
           const data = await response.json();
 
-          console.log("fetchUnidades", data);
 
           if (data.length) {
             return data;
@@ -216,7 +210,6 @@
         );
           const data = await response.json();
 
-          console.log("eventos", data);
 
           if (Array.isArray(data)) {
             return data;
@@ -310,7 +303,6 @@
         }
 
         modal.showModal();
-        console.log(unidadId);
         const cancel = document.getElementById("cancelEventoModal");
         cancel.addEventListener("click", () => {
           const modal = document.querySelector("#eventoModal");
@@ -321,13 +313,9 @@
       const listUnidades = async (idDispositivo) => {
         const unidades = await fetchUnidades(idDispositivo);
 
-        console.log("unidades", unidades);
-
         const idDispositivoInput = document.querySelector(
           "#idDispositivoInput"
         );
-
-        console.log(idDispositivo);
 
         if (idDispositivoInput) {
           idDispositivoInput.value = idDispositivo;
@@ -339,7 +327,6 @@
             <button class="add clickable adminOnly" onclick='createUnidad()'>Agregar Unidad</button>
           </div>`;
         for (const unidad of unidades) {
-          console.log(unidad);
           unidadesContainer.innerHTML += unitItem(unidad);
         }
         await hideSpecialFields();
@@ -384,9 +371,6 @@
       const listOfDevices = async () => {
         const form = document.getElementById("dispositivos");
         const dispositivos = await fetchDispositivos();
-
-
-        console.log("pepe", dispositivos);
 
         for (dispositivo of dispositivos) {
           const id = dispositivo.id;
