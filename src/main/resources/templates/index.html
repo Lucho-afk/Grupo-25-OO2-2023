@@ -60,7 +60,7 @@
             />
             <button
               id="submitAgregarUnidad"
-              class="createSubmit"
+              class="createSubmit clickable"
               onclick="agregarUnidad()"
             >
               Crear Unidad
@@ -233,7 +233,7 @@
         const unidadesContainer = document.querySelector(".unidades");
         unidadesContainer.innerHTML = `
           <div class='unidades'>
-            <button class="add" onclick='createUnidad()'>Agregar Unidad</button>
+            <button class="add clickable" onclick='createUnidad()'>Agregar Unidad</button>
           </div>`;
         for (const unidad of unidades) {
           console.log(unidad);
@@ -263,8 +263,8 @@
           id
         )}</h3>
                 <div>
-                  <button class='toggleButton' onclick="generarEvento('${id}')">Generar evento</button>
-                  <button class='deleteButton' onclick="deleteUnit('${id}')"><i class="bi bi-trash"></i></button>
+                  <button class='toggleButton clickable' onclick="generarEvento('${id}')">Generar evento</button>
+                  <button class='deleteButton clickable' onclick="deleteUnit('${id}')"><i class="bi bi-trash"></i></button>
                 </div>
             </div>
             `;
@@ -494,6 +494,13 @@
 
       .unitItemTitle {
         cursor: pointer;
+      }
+
+      .clickable:active {
+        transform: translateY(5px);
+        transition: all 300ms;
+        /* both directions */
+        animation: shake 0.5s;
       }
     </style>
   </body>
